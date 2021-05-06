@@ -48,15 +48,5 @@ public class SchoolController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-  
-    @PostMapping
-    public ResponseEntity<?> createSchool(@RequestBody School school) {
-        try {
-            return new ResponseEntity<School>(this.schoolService.save(school), HttpStatus.OK);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
     
 }
