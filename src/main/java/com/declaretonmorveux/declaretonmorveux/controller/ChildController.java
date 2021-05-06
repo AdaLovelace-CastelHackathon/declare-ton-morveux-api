@@ -65,4 +65,9 @@ public class ChildController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(value = "/sick")
+    public Integer getNumberOfSick(){
+        return this.childService.countByIsSick();
+    }
 }
