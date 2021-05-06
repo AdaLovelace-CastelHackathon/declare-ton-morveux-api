@@ -31,6 +31,7 @@ public class Child {
     @JoinColumn(name = "parent_id")
     private Parent parent;
 
-    @OneToMany(mappedBy = "children")
+    @ManyToOne
+    @JoinColumn(name = "school_id")
     private School school;
 }
