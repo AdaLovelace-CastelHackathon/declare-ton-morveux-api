@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "task-service", url = "${schools.datas.url}")
+@FeignClient(name = "school-service", url = "${schools.datas.url}")
 public interface SchoolClient {
     
-    @GetMapping("/tasks/ofuser/{id}")
-    public String getData(@PathVariable int id);
+    @GetMapping("/VilleMTP_MTP_Enseignements.geojson")
+    public String getData();
     
 }

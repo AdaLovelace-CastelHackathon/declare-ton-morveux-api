@@ -3,6 +3,7 @@ package com.declaretonmorveux.declaretonmorveux.controller;
 import java.util.List;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
+import com.declaretonmorveux.declaretonmorveux.feign.client.SchoolClient;
 import com.declaretonmorveux.declaretonmorveux.model.School;
 import com.declaretonmorveux.declaretonmorveux.service.SchoolService;
 
@@ -23,6 +24,9 @@ public class SchoolController {
     @Autowired
     private SchoolService schoolService;
 
+    @Autowired
+    private SchoolClient schoolClient;
+
     @GetMapping
     public ResponseEntity<?> listSchools() {
         try {
@@ -41,6 +45,13 @@ public class SchoolController {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> getDatas(){
+        String datas = schoolClient.getData();
+
+        return new ResponseEntity<String>(datas, HttpStatus.OK);
     }
     
 }
