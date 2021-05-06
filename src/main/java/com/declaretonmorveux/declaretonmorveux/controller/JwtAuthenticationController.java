@@ -1,6 +1,5 @@
 package com.declaretonmorveux.declaretonmorveux.controller;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -105,17 +104,6 @@ public class JwtAuthenticationController {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
-
-    // @PostMapping("/closeSession")
-    // public ResponseEntity<?> closeSession(Authentication authentication, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    //     Cookie sessionCookie = new Cookie("sessionId", null);
-    //     sessionCookie.setMaxAge(0);
-    //     sessionCookie.setHttpOnly(true);
-    //     sessionCookie.setPath("/");
-    //     response.addCookie(sessionCookie);
-        
-    //     return ResponseEntity.ok().build();
-    // }
 
     /**
      * Check if the user is authenticated
