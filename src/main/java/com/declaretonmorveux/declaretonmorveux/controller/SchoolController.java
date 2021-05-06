@@ -48,16 +48,7 @@ public class SchoolController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-<<<<<<< HEAD
-=======
-
-    @GetMapping("/test")
-    public ResponseEntity<?> getDatas(){
-        String datas = schoolClient.getData();
-
-        return new ResponseEntity<String>(datas, HttpStatus.OK);
-    }
-
+  
     @PostMapping
     public ResponseEntity<?> createSchool(@RequestBody School school) {
         try {
@@ -67,6 +58,5 @@ public class SchoolController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
->>>>>>> 47f29ef25656270708ba8587d35152102d78b3f6
     
 }
