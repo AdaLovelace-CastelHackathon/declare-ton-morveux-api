@@ -31,4 +31,8 @@ public class ChildService {
     public List<Child> getBySchoolId(Long id) throws DatabaseException{
         return this.childRepository.getBySchoolId(id);
     }
+
+    public Integer countByIsSick(){
+        return this.childRepository.countByIsSick(true);
+    }
 }
