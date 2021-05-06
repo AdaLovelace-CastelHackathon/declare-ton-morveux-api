@@ -36,9 +36,9 @@ public class EnfantController {
     }
 
     @GetMapping(value = "/parent/{parentId}")
-    public ResponseEntity<?> getChildByParentId(@PathVariable Long id) {
+    public ResponseEntity<?> getChildByParentId(@PathVariable Long parentId) {
         try {
-            return new ResponseEntity<List<Child>>(this.childService.getByParentId(id), HttpStatus.OK);
+            return new ResponseEntity<List<Child>>(this.childService.getByParentId(parentId), HttpStatus.OK);
         } catch (DatabaseException e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
