@@ -36,4 +36,10 @@ public class Child {
     @JoinColumn(name = "school_id")
     @JsonIgnoreProperties("childrens")
     private School school;
+
+    @Column(name = "is_sick")
+    private boolean isSick;
+
+    @Column(name = "is_contagious")
+    private boolean isContagious;
 }
