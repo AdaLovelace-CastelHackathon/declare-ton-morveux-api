@@ -35,7 +35,7 @@ public class EnfantController {
         }
     }
 
-    @GetMapping(value = "parent/{parentId}")
+    @GetMapping(value = "/parent/{parentId}")
     public ResponseEntity<?> getChildByParentId(@PathVariable Long id) {
         try {
             return new ResponseEntity<List<Child>>(this.childService.getByParentId(id), HttpStatus.OK);
