@@ -30,7 +30,11 @@ public class ChildService {
         return this.childRepository.getBySchoolId(id);
     }
 
-    public Integer countByIsSick(){
+    public Integer countByIsSick() throws DatabaseException{
         return this.childRepository.countByIsSick(true);
+    }
+
+    public Integer countByIsSickAndIsContagious(boolean isSick, boolean isContagious){
+        return this.childRepository.countByIsSickAndIsContagious(isSick, isContagious);
     }
 }

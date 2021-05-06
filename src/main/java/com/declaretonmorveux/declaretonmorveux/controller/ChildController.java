@@ -1,5 +1,6 @@
 package com.declaretonmorveux.declaretonmorveux.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
@@ -54,7 +55,7 @@ public class ChildController {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }    
+    }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateChild(@RequestBody Child child) {
@@ -67,7 +68,22 @@ public class ChildController {
     }
 
     @GetMapping(value = "/sick")
-    public Integer getNumberOfSick(){
-        return this.childService.countByIsSick();
+    public ResponseEntity<HashMap<String, Integer>> getSick() {
+        HashMap<String, Integer> sickDatas = new HashMap<String, Integer>();
+
+        try {
+            Integer numberOfSick = this.childService.countByIsSick();
+            Integer numberOfContagious = this.childService.countByIsSickAndIsContagious(true, true);
+            Integer numberOfNonContagious = this.childService.countByIsSickAndIsContagious(true, false);
+
+            sickDatas.put("sick", numberOfSick);
+            sickDatas.put("contagious", numberOfContagious);
+            sickDatas.put("nonContagious", numberOfNonContagious);
+
+            return ResponseEntity.ok(sickDatas);
+        } catch (DatabaseException e) {
+            return ResponseEntity.notFound().build();
+        }
+        
     }
 }

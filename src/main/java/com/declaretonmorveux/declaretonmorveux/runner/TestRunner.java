@@ -17,7 +17,7 @@ public class TestRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
     
-        System.err.println(childRepository.countByIsSick(true));
+        System.err.println(childRepository.countByIsSickAndIsContagious(true, false));
     }
     
 }
