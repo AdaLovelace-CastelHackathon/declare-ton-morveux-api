@@ -37,9 +37,9 @@ public class Child {
     @JsonIgnoreProperties("childrens")
     private School school;
 
-    @Column(name = "is_sick")
+    @Column(name = "is_sick", columnDefinition = "bool default false")
     private boolean isSick;
 
-    @Column(name = "is_contagious")
+    @Column(name = "is_contagious", columnDefinition = "bool default false")
     private boolean isContagious;
 }
