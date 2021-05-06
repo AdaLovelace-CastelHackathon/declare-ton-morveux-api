@@ -48,6 +48,16 @@ public class ChildService {
             }
         }
         return count;
+    }
 
+    public Integer countIsSickAndIsContagiousBySchoolId(Long schoolId) throws DatabaseException {
+        Integer count = 0;
+        List<Child> childrenInTheSchool = this.getBySchoolId(schoolId);
+        for(int i=0; i<childrenInTheSchool.size(); i++) {
+            if(childrenInTheSchool.get(i).isSick() && childrenInTheSchool.get(i).isContagious()) {
+                count += 1;
+            }
+        }
+        return count;
     }
 }
