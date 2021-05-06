@@ -1,5 +1,9 @@
 package com.declaretonmorveux.declaretonmorveux.security;
 
+import java.util.Arrays;
+
+import javax.servlet.http.HttpServletResponse;
+
 import com.declaretonmorveux.declaretonmorveux.security.jwt.JwtAuthenticationEntryPoint;
 import com.declaretonmorveux.declaretonmorveux.security.jwt.JwtRequestFilter;
 import com.declaretonmorveux.declaretonmorveux.service.ParentService;
@@ -18,6 +22,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -66,12 +73,27 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .logout().deleteCookies("sessionId");
+            .logout()
+                .logoutUrl("/logout")
+                    .deleteCookies("sessionId")
+                        .invalidateHttpSession(true)
+                            .logoutSuccessHandler((request, response, authentication) -> {
+                                response.setStatus(HttpServletResponse.SC_OK);
+                            });
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
     }
+
+    // @Bean
+    // CorsConfigurationSource corsConfigurationSource() {
+    //     CorsConfiguration configuration = new CorsConfiguration();
+    //     configuration.setAllowedOrigins(Arrays.asList("*"));
+    //     configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "OPTIONS"));
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     source.registerCorsConfiguration("/**", configuration);
+    //     return source;
+    // }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

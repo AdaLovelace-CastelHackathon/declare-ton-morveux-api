@@ -16,7 +16,6 @@ public class CookieUtil {
 
         Cookie sessionIdCookie = new Cookie(cookieName, URLEncoder.encode("Bearer "+ token, "UTF-8"));
         response.addCookie(sessionIdCookie);
-        
         return response;
     }
 

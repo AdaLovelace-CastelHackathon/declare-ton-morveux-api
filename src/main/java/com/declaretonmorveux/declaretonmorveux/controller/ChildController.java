@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
 import com.declaretonmorveux.declaretonmorveux.model.Child;
+import com.declaretonmorveux.declaretonmorveux.model.Parent;
 import com.declaretonmorveux.declaretonmorveux.service.ChildService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/api/children")
 public class ChildController {
 
@@ -48,13 +50,21 @@ public class ChildController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createChild(@RequestBody Child child) {
-        try {
-            return new ResponseEntity<Child>(this.childService.save(child), HttpStatus.CREATED);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> createChild(@RequestBody Child child, Authentication authentication) {
+        if(authentication != null){
+            Parent parent = (Parent)authentication.getPrincipal();
+            child.setParent(parent);
+
+            try {
+                return new ResponseEntity<Child>(this.childService.save(child), HttpStatus.CREATED);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<String>("NOT AUTHORIZED", HttpStatus.FORBIDDEN);
         }
+        
     }
 
     @PutMapping(value = "/{id}")
@@ -83,7 +93,15 @@ public class ChildController {
             return ResponseEntity.ok(sickDatas);
         } catch (DatabaseException e) {
             return ResponseEntity.notFound().build();
+        }    
+    }
+
+    @GetMapping(value = "/countIsSickBySchool/{schoolId}")
+    public ResponseEntity<?> countIsSickBySchoolId(@PathVariable Long schoolId) {
+        try {
+            return new ResponseEntity<Integer>(this.childService.countIsSickBySchoolId(schoolId), HttpStatus.OK);
+        } catch (DatabaseException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
     }
 }

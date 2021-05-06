@@ -1,5 +1,6 @@
 package com.declaretonmorveux.declaretonmorveux.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
@@ -26,8 +27,8 @@ public class ChildService {
         return this.childRepository.getByParentId(id);
     }
 
-    public List<Child> getBySchoolId(Long id) throws DatabaseException{
-        return this.childRepository.getBySchoolId(id);
+    public List<Child> getBySchoolId(Long schoolId) throws DatabaseException{
+        return this.childRepository.getBySchoolId(schoolId);
     }
 
     public Integer countByIsSick() throws DatabaseException{
@@ -36,5 +37,17 @@ public class ChildService {
 
     public Integer countByIsSickAndIsContagious(boolean isSick, boolean isContagious){
         return this.childRepository.countByIsSickAndIsContagious(isSick, isContagious);
+    }
+
+    public Integer countIsSickBySchoolId(Long schoolId) throws DatabaseException {
+        Integer count = 0;
+        List<Child> childrenInTheSchool = this.getBySchoolId(schoolId);
+        for(int i=0; i<childrenInTheSchool.size(); i++) {
+            if(childrenInTheSchool.get(i).isSick()) {
+                count += 1;
+            }
+        }
+        return count;
+
     }
 }
