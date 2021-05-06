@@ -23,5 +23,9 @@ public class SchoolService {
         return this.schoolRepository.findById(id).get();
     }
 
+    public School save(School school) throws DatabaseException {
+        return this.schoolRepository.save(school);
+    }
+
     
 }
