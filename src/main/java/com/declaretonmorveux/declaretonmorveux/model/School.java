@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 @Entity
@@ -18,13 +20,13 @@ import lombok.Data;
 public class School {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private String name;
 
     @OneToMany(mappedBy = "school")
+    @JsonIgnoreProperties("school")
     private List<Child> children;
 
 }

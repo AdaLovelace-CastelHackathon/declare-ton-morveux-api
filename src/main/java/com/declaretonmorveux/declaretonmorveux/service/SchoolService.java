@@ -31,6 +31,10 @@ public class SchoolService {
         this.schoolRepository.deleteAll();
     }
     
+    public void deleteById(long id) throws DatabaseException {
+        this.schoolRepository.deleteById(id);
+    }
+
     public long count(){
         return this.schoolRepository.count();
     }

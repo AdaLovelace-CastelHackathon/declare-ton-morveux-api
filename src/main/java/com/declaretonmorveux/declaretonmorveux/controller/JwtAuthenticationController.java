@@ -105,17 +105,6 @@ public class JwtAuthenticationController {
         }
     }
 
-    @GetMapping("/getUser")
-    public Parent getUser(Authentication authentication){
-        Parent parent = null;
-
-        if(authentication != null){
-            parent = (Parent)authentication.getPrincipal();
-        }
-        
-        return parent;
-    }
-
     /**
      * Check if the user is authenticated
      * @param request A HttpServletRequest object that contain the current request

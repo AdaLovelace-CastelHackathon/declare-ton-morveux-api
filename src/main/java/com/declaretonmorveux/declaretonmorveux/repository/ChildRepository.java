@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ChildRepository extends JpaRepository<Child, Long>{
     
     List<Child> getByParentId(Long id);
+    List<Child> getBySchoolId(Long id);
 }

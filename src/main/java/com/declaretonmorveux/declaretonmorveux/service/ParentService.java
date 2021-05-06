@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParentService implements UserDetailsService {
 
+    
     private ParentRepository parentRepository;
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
+    
     public ParentService(ParentRepository parentRepository,
             PasswordEncoder passwordEncoder) {
         this.parentRepository = parentRepository;
