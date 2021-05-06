@@ -40,7 +40,7 @@ public class DatasRunner implements CommandLineRunner{
 
                 School school = new School();
                 school.setId(schooldId);
-                school.setName(schoolName);
+                school.setName(schoolName.replace("\"", ""));
 
                 schoolService.save(school);
             }
