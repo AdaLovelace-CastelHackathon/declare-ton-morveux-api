@@ -104,4 +104,13 @@ public class ChildController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(value = "/countIsSickAndIsContagiousBySchool/{schoolId}")
+    public ResponseEntity<?> countIsSickAndIsContagiousBySchoolId(@PathVariable Long schoolId) {
+        try {
+            return new ResponseEntity<Integer>(this.childService.countIsSickAndIsContagiousBySchoolId(schoolId), HttpStatus.OK);
+        } catch (DatabaseException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
