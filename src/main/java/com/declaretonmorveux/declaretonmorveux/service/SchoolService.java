@@ -26,6 +26,5 @@ public class SchoolService {
     public School save(School school) throws DatabaseException {
         return this.schoolRepository.save(school);
     }
-
     
 }
