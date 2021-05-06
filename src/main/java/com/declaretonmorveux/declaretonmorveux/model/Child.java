@@ -28,9 +28,9 @@ public class Child {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "parent_id")
     private Parent parent;
 
-    @OneToMany(mappedBy = "child")
+    @OneToMany(mappedBy = "children")
     private School school;
 }

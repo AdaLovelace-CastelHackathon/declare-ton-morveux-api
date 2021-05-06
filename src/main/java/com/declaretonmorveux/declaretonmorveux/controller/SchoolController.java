@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(value = "https://declare-ton-morveux.herokuapp.com/schools")
+@RequestMapping(value = "localhost:8080/schools")
 public class SchoolController {
 
     @Autowired
