@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/parents")
 public class ParentController {
     
-    @GetMapping("/getParent")
+    @GetMapping("/me")
     public ResponseEntity getParent(Authentication authentication){
         Parent parent = null;
 
