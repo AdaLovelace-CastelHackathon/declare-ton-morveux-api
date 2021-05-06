@@ -1,6 +1,8 @@
 package com.declaretonmorveux.declaretonmorveux.security;
 
-import javax.servlet.http.HttpServletResponse;
+import com.declaretonmorveux.declaretonmorveux.security.jwt.JwtAuthenticationEntryPoint;
+import com.declaretonmorveux.declaretonmorveux.security.jwt.JwtRequestFilter;
+import com.declaretonmorveux.declaretonmorveux.service.ParentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,24 +24,66 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ParentService parentService;
+
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
+    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, ParentService parentService) {
+        this.passwordEncoder = passwordEncoder;
+        this.parentService = parentService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
-                .and()
-                .csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
-                .antMatchers(HttpMethod.POST, "/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/isAuthenticated").permitAll()
-                .antMatchers(HttpMethod.GET, "/getUser").authenticated()
-                .antMatchers("/**").denyAll();
+        .and()
+        .csrf().disable()
+        .authorizeRequests()
+        .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
+        .antMatchers(HttpMethod.POST, "/register").permitAll()
+        .antMatchers(HttpMethod.GET, "/isAuthenticated").permitAll()
+        .antMatchers(HttpMethod.GET, "/getUser").authenticated()
+        .antMatchers("/**").denyAll()
+        .and()
+        .exceptionHandling()
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        .and()
+        .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .logout().deleteCookies("sessionId");
+
+        // Add a filter to validate the tokens with every request
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(parentService);
+
+        return provider;
     }
 }
