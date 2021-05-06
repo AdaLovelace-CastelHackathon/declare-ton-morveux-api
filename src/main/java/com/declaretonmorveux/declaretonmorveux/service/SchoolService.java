@@ -26,5 +26,13 @@ public class SchoolService {
     public School save(School school) throws DatabaseException {
         return this.schoolRepository.save(school);
     }
+
+    public void deleteAll() throws DatabaseException {
+        this.schoolRepository.deleteAll();
+    }
+    
+    public long count(){
+        return this.schoolRepository.count();
+    }
     
 }

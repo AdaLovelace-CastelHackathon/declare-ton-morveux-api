@@ -24,10 +24,14 @@ public class DatasRunner implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
+
         String datas = schoolClient.getData();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(datas).get("features");
 
+        if(schoolService.count() > 0){
+            schoolService.deleteAll();
+        }
 
         for(int i = 0; i < jsonNode.size(); i++){
             String schoolName = jsonNode.get(i).get("properties").get("libel").toString();
