@@ -45,9 +45,9 @@ public class DatasRunner implements CommandLineRunner{
                 schoolService.save(school);
             }
 
-     
+            
         }
-      
+        System.err.println("DATAS INSERTION DONE");
     }
     
 }

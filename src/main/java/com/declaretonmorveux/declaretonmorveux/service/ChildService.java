@@ -5,8 +5,6 @@ import java.util.List;
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
 import com.declaretonmorveux.declaretonmorveux.model.Child;
 import com.declaretonmorveux.declaretonmorveux.repository.ChildRepository;
-
-import org.bouncycastle.asn1.dvcs.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +28,13 @@ public class ChildService {
 
     public List<Child> getBySchoolId(Long id) throws DatabaseException{
         return this.childRepository.getBySchoolId(id);
+    }
+
+    public Integer countByIsSick() throws DatabaseException{
+        return this.childRepository.countByIsSick(true);
+    }
+
+    public Integer countByIsSickAndIsContagious(boolean isSick, boolean isContagious){
+        return this.childRepository.countByIsSickAndIsContagious(isSick, isContagious);
     }
 }
