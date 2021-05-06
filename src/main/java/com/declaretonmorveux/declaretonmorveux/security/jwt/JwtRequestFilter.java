@@ -37,6 +37,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+
+                System.err.println(request.getMethod());
         String requestToken = getTokenFromCookies(request);
 
         String username = null;
@@ -105,8 +107,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 if (cookie.getName().equals(cookieUtil.getCookieName())) {
                     token = URLDecoder.decode(cookie.getValue(), "UTF-8");
                 }
+                
             }
         }
+
+        
 
         return token;
     }
