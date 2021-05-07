@@ -1,5 +1,6 @@
 package com.declaretonmorveux.declaretonmorveux.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class ChildService {
         Child child = this.childRepository.getOne(childId);
         child.setSick(isSick);
         child.setContagious(isContagious);
-
+        child.setLastDeclarationDate(LocalDate.now());
         return this.childRepository.save(child);
     }
 
