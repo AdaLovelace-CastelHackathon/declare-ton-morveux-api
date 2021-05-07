@@ -41,6 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
+
         String requestToken = getTokenFromCookies(request);
 
         String username = null;

@@ -1,12 +1,13 @@
 package com.declaretonmorveux.declaretonmorveux.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
 import com.declaretonmorveux.declaretonmorveux.model.Child;
 import com.declaretonmorveux.declaretonmorveux.repository.ChildRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +17,31 @@ public class ChildService {
     @Autowired
     private ChildRepository childRepository;
 
+    public List<Child> getAllChildren() throws DatabaseException {
+        return this.childRepository.findAll();
+    }
+
     public Child getById(Long id) throws DatabaseException {
         return this.childRepository.findById(id).get();
     }
 
     public Child setIsSickAndIsContagiousByChildId(boolean isSick, boolean isContagious, long childId) throws DatabaseException{
-        Child child = this.childRepository.getOne(childId);
-        child.setSick(isSick);
-        child.setContagious(isContagious);
-        child.setLastDeclarationDate(LocalDate.now());
-        return this.childRepository.save(child);
+        Optional<Child> opChild = this.childRepository.findById(childId);
+
+        if(opChild.isPresent()){
+            Child child = opChild.get();
+            child.setSick(isSick);
+            child.setContagious(isContagious);
+            child.setLastDeclarationDate(LocalDate.now());
+
+            return this.childRepository.save(child);
+        }
+
+        return null;
     }
 
     public Child save(Child child) throws DatabaseException{
+        child.setLastDeclarationDate(LocalDate.now());
         return this.childRepository.save(child);
     }
 
