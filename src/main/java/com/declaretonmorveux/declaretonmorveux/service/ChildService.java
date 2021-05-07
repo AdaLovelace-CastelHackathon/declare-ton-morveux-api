@@ -28,6 +28,10 @@ public class ChildService {
         return this.childRepository.save(child);
     }
 
+    public Child save(Child child) throws DatabaseException{
+        return this.childRepository.save(child);
+    }
+
     public List<Child> getByParentId(Long id) throws DatabaseException {
         return this.childRepository.getByParentId(id);
     }
