@@ -1,5 +1,7 @@
 package com.declaretonmorveux.declaretonmorveux.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,5 +44,8 @@ public class Child {
 
     @Column(name = "is_contagious", columnDefinition = "bool default false")
     private boolean isContagious;
+
+    @Column(name = "last_declaration_date")
+    private LocalDate lastDeclarationDate;
     
 }
