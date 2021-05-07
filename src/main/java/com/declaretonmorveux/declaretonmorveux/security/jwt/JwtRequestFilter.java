@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.declaretonmorveux.declaretonmorveux.security.CookieUtil;
+import com.declaretonmorveux.declaretonmorveux.service.ExpiredJwtService;
 import com.declaretonmorveux.declaretonmorveux.service.ParentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private ExpiredJwtService expiredJwtService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-
-                System.err.println(request.getMethod());
         String requestToken = getTokenFromCookies(request);
 
         String username = null;
@@ -54,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestToken != null && requestToken.startsWith("Bearer ")) {
 
             jwtToken = requestToken.substring(7);
-
+            
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
@@ -68,8 +70,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT Token does not begin with Bearer String");
         }
 
+        boolean isTokenBlackLister = (expiredJwtService.countByJwt(jwtToken) > 0);
+
         // Once we get the token validate it.
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && !isTokenBlackLister) {
 
             UserDetails userDetails;
 

@@ -1,5 +1,6 @@
 package com.declaretonmorveux.declaretonmorveux.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -125,7 +126,7 @@ public class JwtAuthenticationController {
      * @throws Exception
      */
     private Authentication authenticate(String username, String password) throws Exception {
-
+        
         try {
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {

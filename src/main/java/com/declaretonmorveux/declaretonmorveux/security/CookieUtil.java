@@ -15,6 +15,8 @@ public class CookieUtil {
     public HttpServletResponse addTokenToCookiesResponse(HttpServletResponse response, String token) throws UnsupportedEncodingException {
 
         Cookie sessionIdCookie = new Cookie(cookieName, URLEncoder.encode("Bearer "+ token, "UTF-8"));
+        sessionIdCookie.setHttpOnly(true);
+        sessionIdCookie.setSecure(false);
         response.addCookie(sessionIdCookie);
         return response;
     }
