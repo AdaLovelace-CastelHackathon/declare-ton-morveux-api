@@ -19,7 +19,11 @@ public class ChildService {
         return this.childRepository.findById(id).get();
     }
 
-    public Child save(Child child) throws DatabaseException {
+    public Child setIsSickAndIsContagiousByChildId(boolean isSick, boolean isContagious, long childId) throws DatabaseException{
+        Child child = this.childRepository.getOne(childId);
+        child.setSick(isSick);
+        child.setContagious(isContagious);
+
         return this.childRepository.save(child);
     }
 

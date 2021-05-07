@@ -3,6 +3,7 @@ package com.declaretonmorveux.declaretonmorveux.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import com.declaretonmorveux.declaretonmorveux.dto.ChildStateDto;
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
 import com.declaretonmorveux.declaretonmorveux.model.Child;
 import com.declaretonmorveux.declaretonmorveux.model.Parent;
@@ -64,13 +65,16 @@ public class ChildController {
         } else {
             return new ResponseEntity<String>("NOT AUTHORIZED", HttpStatus.FORBIDDEN);
         }
-        
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateChild(@RequestBody Child child) {
+    @PutMapping(value = "/")
+    public ResponseEntity<?> updateChildState(@RequestBody ChildStateDto child) {
+        boolean isSick = child.isSick();
+        boolean isContagious = child.isContagious();
+        long childId = child.getId();
+
         try {
-            return new ResponseEntity<Child>(this.childService.save(child), HttpStatus.ACCEPTED);
+            return new ResponseEntity<Child>(this.childService.setIsSickAndIsContagiousByChildId(isSick, isContagious, childId), HttpStatus.ACCEPTED);
         } catch (DatabaseException e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

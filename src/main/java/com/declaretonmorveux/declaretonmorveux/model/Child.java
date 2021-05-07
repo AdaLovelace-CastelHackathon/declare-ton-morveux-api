@@ -42,4 +42,5 @@ public class Child {
 
     @Column(name = "is_contagious", columnDefinition = "bool default false")
     private boolean isContagious;
+    
 }
