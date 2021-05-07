@@ -16,6 +16,10 @@ public class ChildService {
     @Autowired
     private ChildRepository childRepository;
 
+    public List<Child> getAllChildren() throws DatabaseException {
+        return this.childRepository.findAll();
+    }
+
     public Child getById(Long id) throws DatabaseException {
         return this.childRepository.findById(id).get();
     }
@@ -29,6 +33,7 @@ public class ChildService {
     }
 
     public Child save(Child child) throws DatabaseException{
+        child.setLastDeclarationDate(LocalDate.now());
         return this.childRepository.save(child);
     }
 
