@@ -25,8 +25,10 @@ public class School {
     @Column
     private String name;
 
+    @Column
     private String longitude;
 
+    @Column
     private String latitude;
 
     @OneToMany(mappedBy = "school")

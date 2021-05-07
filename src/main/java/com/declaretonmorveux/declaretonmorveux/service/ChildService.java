@@ -42,6 +42,7 @@ public class ChildService {
 
     public Child save(Child child) throws DatabaseException{
         child.setLastDeclarationDate(LocalDate.now());
+        System.err.println(child.toString());
         return this.childRepository.save(child);
     }
 
