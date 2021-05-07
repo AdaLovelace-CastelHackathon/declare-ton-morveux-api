@@ -44,6 +44,9 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
+    CustomLogoutHandler customLogoutHandler;
+
+    @Autowired
     public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder, ParentService parentService) {
         this.passwordEncoder = passwordEncoder;
         this.parentService = parentService;
@@ -74,15 +77,29 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .logout()
-                .logoutUrl("/logout")
-                    .deleteCookies("sessionId")
-                        .invalidateHttpSession(true)
-                            .logoutSuccessHandler((request, response, authentication) -> {
-                                response.setStatus(HttpServletResponse.SC_OK);
-                            });
+                .addLogoutHandler(customLogoutHandler)
+                    .logoutUrl("/logout")
+                        .deleteCookies("sessionId")
+                            .invalidateHttpSession(true)
+                                .logoutSuccessHandler((request, response, authentication) -> {
+                                    System.err.println("LOGOUT SUCCESS !");
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                });
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Override

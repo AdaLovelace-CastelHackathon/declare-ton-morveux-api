@@ -106,17 +106,6 @@ public class JwtAuthenticationController {
         }
     }
 
-    // @PostMapping("/closeSession")
-    // public ResponseEntity<?> closeSession(Authentication authentication, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    //     Cookie sessionCookie = new Cookie("sessionId", null);
-    //     sessionCookie.setMaxAge(0);
-    //     sessionCookie.setHttpOnly(true);
-    //     sessionCookie.setPath("/");
-    //     response.addCookie(sessionCookie);
-        
-    //     return ResponseEntity.ok().build();
-    // }
-
     /**
      * Check if the user is authenticated
      * @param request A HttpServletRequest object that contain the current request
@@ -137,7 +126,7 @@ public class JwtAuthenticationController {
      * @throws Exception
      */
     private Authentication authenticate(String username, String password) throws Exception {
-
+        
         try {
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
