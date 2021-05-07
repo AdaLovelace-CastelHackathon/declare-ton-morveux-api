@@ -32,8 +32,10 @@ public class DatasRunner implements CommandLineRunner{
 
         for(int i = 0; i < jsonNode.size(); i++){
             long schooldId = i + 1;
+            School oldSchool = schoolService.getById(schooldId);
             boolean schoolHasChild = (childService.getBySchoolId(schooldId).size() > 0);
             String schoolName = jsonNode.get(i).get("properties").get("libel").toString();
+            JsonNode schoolCoordinatesJsonNodes = jsonNode.get(i).get("geometry").get("coordinates");
 
             if(!schoolHasChild && !schoolName.isEmpty()){
                 schoolService.deleteById(schooldId);
@@ -41,8 +43,17 @@ public class DatasRunner implements CommandLineRunner{
                 School school = new School();
                 school.setId(schooldId);
                 school.setName(schoolName.replace("\"", ""));
+                school.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
+                school.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
 
                 schoolService.save(school);
+            } else {
+                oldSchool.setId(schooldId);
+                oldSchool.setName(schoolName.replace("\"", ""));
+                oldSchool.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
+                oldSchool.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
+
+                schoolService.save(oldSchool);
             }
 
             

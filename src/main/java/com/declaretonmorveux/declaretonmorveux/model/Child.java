@@ -47,5 +47,14 @@ public class Child {
 
     @Column(name = "last_declaration_date")
     private LocalDate lastDeclarationDate;
+
+    @Override
+    public String toString() {
+        return "Child [firstName=" + firstName + ", id=" + id + ", isContagious=" + isContagious + ", isSick=" + isSick
+                + ", lastDeclarationDate=" + lastDeclarationDate + ", lastName=" + lastName + ", parent=" + parent
+                + ", school=" + school + "]";
+    }
+
+    
     
 }
