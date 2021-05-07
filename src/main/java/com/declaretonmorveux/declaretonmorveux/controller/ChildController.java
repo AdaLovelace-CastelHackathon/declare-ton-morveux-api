@@ -52,6 +52,7 @@ public class ChildController {
 
     @PostMapping
     public ResponseEntity<?> createChild(@RequestBody Child child, Authentication authentication) {
+        System.err.println("CREATE CHILD");
         if(authentication != null){
             Parent parent = (Parent)authentication.getPrincipal();
             child.setParent(parent);

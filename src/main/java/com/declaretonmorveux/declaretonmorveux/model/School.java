@@ -25,6 +25,10 @@ public class School {
     @Column
     private String name;
 
+    private String longitude;
+
+    private String latitude;
+
     @OneToMany(mappedBy = "school")
     @JsonIgnoreProperties("school")
     private List<Child> children;
