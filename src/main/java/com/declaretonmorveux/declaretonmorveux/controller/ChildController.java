@@ -91,6 +91,7 @@ public class ChildController {
             Integer numberOfContagious = this.childService.countByIsSickAndIsContagious(true, true);
             Integer numberOfNonContagious = this.childService.countByIsSickAndIsContagious(true, false);
 
+            System.err.println(numberOfContagious);
             sickDatas.put("sick", numberOfSick);
             sickDatas.put("contagious", numberOfContagious);
             sickDatas.put("nonContagious", numberOfNonContagious);
