@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
 import com.declaretonmorveux.declaretonmorveux.model.Child;
+import com.declaretonmorveux.declaretonmorveux.model.Declaration;
 import com.declaretonmorveux.declaretonmorveux.repository.ChildRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class ChildService {
     @Autowired
     private ChildRepository childRepository;
 
+    @Autowired
+    private DeclarationService declarationService;
+
     public List<Child> getAllChildren() throws DatabaseException {
         return this.childRepository.findAll();
     }
@@ -26,23 +30,36 @@ public class ChildService {
     }
 
     public Child setIsSickAndIsContagiousByChildId(boolean isSick, boolean isContagious, long childId) throws DatabaseException{
-        Optional<Child> opChild = this.childRepository.findById(childId);
+        Child child = this.childRepository.findById(childId).get();
 
-        if(opChild.isPresent()){
-            Child child = opChild.get();
+
+        if(isSick && !child.isSick()){
+            LocalDate now = LocalDate.now();
+            Declaration declaration = new Declaration();
+            
+            declaration.setContagious(child.isContagious());
+            declaration.setDate(now);
+            declaration.setSchoolId(child.getSchool().getId());
+
+            declarationService.save(declaration);
+
             child.setSick(isSick);
             child.setContagious(isContagious);
-            child.setLastDeclarationDate(LocalDate.now());
+            child.setLastDeclarationDate(now);
 
             return this.childRepository.save(child);
         }
+
+
+            
 
         return null;
     }
 
     public Child save(Child child) throws DatabaseException{
-        child.setLastDeclarationDate(LocalDate.now());
-        System.err.println(child.toString());
+        LocalDate now = LocalDate.now();
+        child.setLastDeclarationDate(now);
+        
         return this.childRepository.save(child);
     }
 
