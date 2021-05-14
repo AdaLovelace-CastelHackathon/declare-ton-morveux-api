@@ -20,6 +20,7 @@ public class CookieUtil {
         sessionIdCookie.setHttpOnly(true);
         sessionIdCookie.setSecure(false);
         sessionIdCookie.setPath("/");
+        sessionIdCookie.setDomain("localhost");
         sessionIdCookie.setMaxAge((int)JWT_TOKEN_VALIDITY * 1000);
         response.addCookie(sessionIdCookie);
         
