@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
+
 import static com.declaretonmorveux.declaretonmorveux.security.jwt.JwtTokenUtil.*;
 
 public class CookieUtil {
@@ -18,9 +20,8 @@ public class CookieUtil {
 
         Cookie sessionIdCookie = new Cookie(cookieName, URLEncoder.encode("Bearer "+ token, "UTF-8"));
         sessionIdCookie.setHttpOnly(true);
-        sessionIdCookie.setSecure(false);
+        sessionIdCookie.setSecure(true);
         sessionIdCookie.setPath("/");
-        sessionIdCookie.setDomain("localhost");
         sessionIdCookie.setMaxAge((int)JWT_TOKEN_VALIDITY * 1000);
         response.addCookie(sessionIdCookie);
         
