@@ -41,7 +41,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-
         String requestToken = getTokenFromCookies(request);
 
         String username = null;
@@ -57,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestToken != null && requestToken.startsWith("Bearer ")) {
 
             jwtToken = requestToken.substring(7);
-            
+
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
@@ -107,16 +106,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
         CookieUtil cookieUtil = new CookieUtil();
 
-        if(cookies != null){
+        if (cookies != null) {
+
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(cookieUtil.getCookieName())) {
                     token = URLDecoder.decode(cookie.getValue(), "UTF-8");
                 }
-                
+
             }
         }
-
-        
 
         return token;
     }
