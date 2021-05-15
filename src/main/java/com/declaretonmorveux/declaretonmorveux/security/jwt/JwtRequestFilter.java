@@ -70,10 +70,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("JWT Token does not begin with Bearer String");
         }
 
-        boolean isTokenBlackLister = (expiredJwtService.countByJwt(jwtToken) > 0);
+        boolean isTokenBlackListed = (expiredJwtService.countByJwt(jwtToken) > 0);
 
         // Once we get the token validate it.
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && !isTokenBlackLister) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && !isTokenBlackListed) {
 
             UserDetails userDetails;
 
@@ -101,7 +101,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    private String getTokenFromCookies(HttpServletRequest request) throws UnsupportedEncodingException {
+    public String getTokenFromCookies(HttpServletRequest request) throws UnsupportedEncodingException {
         String token = null;
         Cookie[] cookies = request.getCookies();
         CookieUtil cookieUtil = new CookieUtil();
@@ -109,7 +109,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (cookies != null) {
 
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(cookieUtil.getCookieName())) {
+                if (cookie.getName().equals(cookieUtil.getCookieTokenName())) {
                     token = URLDecoder.decode(cookie.getValue(), "UTF-8");
                 }
 

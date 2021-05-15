@@ -80,7 +80,6 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
             .logout()
                 .addLogoutHandler(customLogoutHandler)
                     .logoutUrl("/logout")
-                        .deleteCookies("sessionId")
                             .invalidateHttpSession(true)
                                 .logoutSuccessHandler((request, response, authentication) -> {
                                     System.err.println("LOGOUT SUCCESS !");

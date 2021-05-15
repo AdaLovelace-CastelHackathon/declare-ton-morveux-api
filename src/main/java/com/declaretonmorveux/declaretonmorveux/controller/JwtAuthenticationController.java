@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.declaretonmorveux.declaretonmorveux.security.jwt.JwtTokenUtil.*;
+
 @RestController
 public class JwtAuthenticationController {
 
@@ -66,7 +68,7 @@ public class JwtAuthenticationController {
             HttpHeaders headers = new HttpHeaders();
 
             token = jwtTokenUtil.generateToken(userDetails);
-            headers.add("Set-Cookie", cookieUtil.createCookieWithToken(token).toString());
+            headers.add("Set-Cookie", cookieUtil.createCookieWithToken(token, (int)JWT_TOKEN_VALIDITY * 1000).toString());
 
             return ResponseEntity.ok().headers(headers).body(new JwtResponse(token));
         } 
