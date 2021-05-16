@@ -30,13 +30,20 @@ public class ChildController {
     private ChildService childService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getChildById(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<Child>(this.childService.getById(id), HttpStatus.OK);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> getChildById(@PathVariable Long id, Authentication authentication) {
+        Parent parent = (Parent)authentication.getPrincipal();
+
+        if(parent.getId() == id){
+            try {
+                return new ResponseEntity<Child>(this.childService.getById(id), HttpStatus.OK);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<String>("Not your own content", HttpStatus.FORBIDDEN);
         }
+        
     }
 
     @GetMapping(value = "/parent/{parentId}")
