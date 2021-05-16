@@ -30,12 +30,30 @@ public class ChildController {
     private ChildService childService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getChildById(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<?> getChildById(@PathVariable Long id, Authentication authentication){
         Parent parent = (Parent)authentication.getPrincipal();
 
-        if(parent.getId() == id){
+        try {
+            Child child = this.childService.getById(id);
+
+            if(child.getParent().getId() == parent.getId()){
+                return new ResponseEntity<Child>(child, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("Not your own content", HttpStatus.FORBIDDEN);
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/parent/{parentId}")
+    public ResponseEntity<?> getChildByParentId(@PathVariable Long parentId, Authentication authentication) {
+        Parent parent = (Parent) authentication.getPrincipal();
+
+        if (parent.getId() == parentId) {
             try {
-                return new ResponseEntity<Child>(this.childService.getById(id), HttpStatus.OK);
+                return new ResponseEntity<List<Child>>(this.childService.getByParentId(parentId), HttpStatus.OK);
             } catch (DatabaseException e) {
                 e.printStackTrace();
                 return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -43,24 +61,14 @@ public class ChildController {
         } else {
             return new ResponseEntity<String>("Not your own content", HttpStatus.FORBIDDEN);
         }
-        
-    }
 
-    @GetMapping(value = "/parent/{parentId}")
-    public ResponseEntity<?> getChildByParentId(@PathVariable Long parentId) {
-        try {
-            return new ResponseEntity<List<Child>>(this.childService.getByParentId(parentId), HttpStatus.OK);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @PostMapping
     public ResponseEntity<?> createChild(@RequestBody Child child, Authentication authentication) {
         System.err.println("CREATE CHILD");
-        if(authentication != null){
-            Parent parent = (Parent)authentication.getPrincipal();
+        if (authentication != null) {
+            Parent parent = (Parent) authentication.getPrincipal();
             child.setParent(parent);
 
             try {
@@ -81,7 +89,9 @@ public class ChildController {
         long childId = child.getId();
 
         try {
-            return new ResponseEntity<Child>(this.childService.setIsSickAndIsContagiousByChildId(isSick, isContagious, childId), HttpStatus.ACCEPTED);
+            return new ResponseEntity<Child>(
+                    this.childService.setIsSickAndIsContagiousByChildId(isSick, isContagious, childId),
+                    HttpStatus.ACCEPTED);
         } catch (DatabaseException e) {
             e.printStackTrace();
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -105,7 +115,7 @@ public class ChildController {
             return ResponseEntity.ok(sickDatas);
         } catch (DatabaseException e) {
             return ResponseEntity.notFound().build();
-        }    
+        }
     }
 
     @GetMapping(value = "/countIsSickBySchool/{schoolId}")
@@ -120,7 +130,8 @@ public class ChildController {
     @GetMapping(value = "/countIsSickAndIsContagiousBySchool/{schoolId}")
     public ResponseEntity<?> countIsSickAndIsContagiousBySchoolId(@PathVariable Long schoolId) {
         try {
-            return new ResponseEntity<Integer>(this.childService.countIsSickAndIsContagiousBySchoolId(schoolId), HttpStatus.OK);
+            return new ResponseEntity<Integer>(this.childService.countIsSickAndIsContagiousBySchoolId(schoolId),
+                    HttpStatus.OK);
         } catch (DatabaseException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
