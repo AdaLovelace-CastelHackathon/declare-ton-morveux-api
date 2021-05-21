@@ -29,25 +29,24 @@ public class ChildService {
         return this.childRepository.findById(id).get();
     }
 
-    public Child setIsSickAndIsContagiousByChildId(boolean isSick, boolean isContagious, long childId) throws DatabaseException{
-        Child child = this.childRepository.findById(childId).get();
+    public Child setIsSickAndIsContagiousByChildId(boolean isSick, boolean isContagious, long childId, Child childToUpdate) throws DatabaseException{
 
 
-        if(isSick && !child.isSick()){
+        if(isSick && !childToUpdate.isSick()){
             LocalDate now = LocalDate.now();
             Declaration declaration = new Declaration();
             
-            declaration.setContagious(child.isContagious());
+            declaration.setContagious(childToUpdate.isContagious());
             declaration.setDate(now);
-            declaration.setSchoolId(child.getSchool().getId());
+            declaration.setSchoolId(childToUpdate.getSchool().getId());
 
             declarationService.save(declaration);
 
-            child.setSick(isSick);
-            child.setContagious(isContagious);
-            child.setLastDeclarationDate(now);
+            childToUpdate.setSick(isSick);
+            childToUpdate.setContagious(isContagious);
+            childToUpdate.setLastDeclarationDate(now);
 
-            return this.childRepository.save(child);
+            return this.childRepository.save(childToUpdate);
         }
 
 

@@ -68,6 +68,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         .antMatchers(HttpMethod.POST, "/api/children/**").permitAll()
         .antMatchers(HttpMethod.PUT, "/api/children/**").permitAll()
         .antMatchers(HttpMethod.GET, "/api/parents/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/children/parent/**").permitAll()
         .antMatchers(HttpMethod.GET, "/api/declarations/**").permitAll()
         .antMatchers("/**").denyAll()
         .and()

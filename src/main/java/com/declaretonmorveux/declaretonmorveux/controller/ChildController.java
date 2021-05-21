@@ -30,13 +30,13 @@ public class ChildController {
     private ChildService childService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getChildById(@PathVariable Long id, Authentication authentication){
-        Parent parent = (Parent)authentication.getPrincipal();
+    public ResponseEntity<?> getChildById(@PathVariable Long id, Authentication authentication) {
+        Parent parent = (Parent) authentication.getPrincipal();
 
         try {
             Child child = this.childService.getById(id);
 
-            if(child.getParent().getId() == parent.getId()){
+            if (child.getParent().getId() == parent.getId()) {
                 return new ResponseEntity<Child>(child, HttpStatus.OK);
             } else {
                 return new ResponseEntity<String>("Not your own content", HttpStatus.FORBIDDEN);
@@ -83,19 +83,29 @@ public class ChildController {
     }
 
     @PutMapping(value = "/")
-    public ResponseEntity<?> updateChildState(@RequestBody ChildStateDto child) {
-        boolean isSick = child.isSick();
-        boolean isContagious = child.isContagious();
-        long childId = child.getId();
+    public ResponseEntity<?> updateChildState(@RequestBody ChildStateDto child, Authentication authentication) throws DatabaseException {
+        Parent parent = (Parent) authentication.getPrincipal();
+        Child childToUpdate = this.childService.getById(child.getId());
 
-        try {
-            return new ResponseEntity<Child>(
-                    this.childService.setIsSickAndIsContagiousByChildId(isSick, isContagious, childId),
-                    HttpStatus.ACCEPTED);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (childToUpdate.getParent().getId() == parent.getId()) {
+
+            boolean isSick = child.isSick();
+            boolean isContagious = child.isContagious();
+            long childId = child.getId();
+
+            try {
+                return new ResponseEntity<Child>(
+                        this.childService.setIsSickAndIsContagiousByChildId(isSick, isContagious, childId, childToUpdate),
+                        HttpStatus.ACCEPTED);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+                return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        } else {
+            return new ResponseEntity<String>("AUTHENTICATION ERROR", HttpStatus.FORBIDDEN);
         }
+
     }
 
     @GetMapping(value = "/sick")
