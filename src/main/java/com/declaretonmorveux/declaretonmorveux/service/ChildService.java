@@ -36,7 +36,7 @@ public class ChildService {
             LocalDate now = LocalDate.now();
             Declaration declaration = new Declaration();
             
-            declaration.setContagious(childToUpdate.isContagious());
+            declaration.setContagious(isContagious);
             declaration.setDate(now);
             declaration.setSchoolId(childToUpdate.getSchool().getId());
 
