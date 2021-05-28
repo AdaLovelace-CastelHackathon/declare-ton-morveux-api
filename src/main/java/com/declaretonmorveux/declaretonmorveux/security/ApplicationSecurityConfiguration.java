@@ -94,7 +94,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://adalovelace-castelhackathon.github.io", "https://nasrisofiane.github.io/declare-ton-morveux-react"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://adalovelace-castelhackathon.github.io", "https://nasrisofiane.github.io"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
         configuration.setAllowCredentials(true);
