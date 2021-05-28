@@ -64,11 +64,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         .antMatchers(HttpMethod.GET, "/getUser").authenticated()
         .antMatchers(HttpMethod.GET, "/api/schools/**").permitAll()
         .antMatchers(HttpMethod.POST, "/api/schools/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/children/**").permitAll()
-        .antMatchers(HttpMethod.POST, "/api/children/**").permitAll()
-        .antMatchers(HttpMethod.PUT, "/api/children/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/parents/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/children/parent/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/children/**").authenticated()
+        .antMatchers(HttpMethod.POST, "/api/children/**").authenticated()
+        .antMatchers(HttpMethod.PUT, "/api/children/**").authenticated()
+        .antMatchers(HttpMethod.GET, "/api/parents/**").authenticated()
+        .antMatchers(HttpMethod.GET, "/api/children/parent/**").authenticated()
         .antMatchers(HttpMethod.GET, "/api/declarations/**").permitAll()
         .antMatchers("/**").denyAll()
         .and()
@@ -94,7 +94,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://adalovelace-castelhackathon.github.io"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://adalovelace-castelhackathon.github.io", "https://nasrisofiane.github.io"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
         configuration.setAllowCredentials(true);
