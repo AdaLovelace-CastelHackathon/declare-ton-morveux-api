@@ -12,4 +12,5 @@ public interface ChildRepository extends JpaRepository<Child, Long>{
     List<Child> getBySchoolId(Long id);
     public Integer countByIsSick(boolean isSick);
     public Integer countByIsSickAndIsContagious(boolean isSick, boolean isContagious);
+    public List<Child> getAllByIsSick(boolean isSick);
 }
