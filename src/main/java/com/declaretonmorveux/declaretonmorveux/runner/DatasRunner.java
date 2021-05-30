@@ -32,35 +32,35 @@ public class DatasRunner implements CommandLineRunner {
 
         for (int i = 0; i < jsonNode.size(); i++) {
             long schooldId = i + 1;
+            School oldSchool = schoolService.getById(schooldId);
             boolean schoolHasChild = (childService.getBySchoolId(schooldId).size() > 0);
             String schoolName = jsonNode.get(i).get("properties").get("libel").asText();
             JsonNode schoolCoordinatesJsonNodes = jsonNode.get(i).get("geometry").get("coordinates");
 
-            // if (!schoolHasChild && !schoolName.isEmpty()) {
+            if (!schoolHasChild && !schoolName.isEmpty()) {
 
-            //     schoolService.deleteById(schooldId);
+                if (oldSchool != null) {
+                    schoolService.deleteById(schooldId);
+                }
 
-            //     School school = new School();
-            //     school.setId(schooldId);
-            //     school.setName(schoolName.replace("\"", ""));
-            //     school.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
-            //     school.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
+                School school = new School();
+                school.setId(schooldId);
+                school.setName(schoolName.replace("\"", ""));
+                school.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
+                school.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
 
-            //     schoolService.save(school);
-            // } else {
-            //     School oldSchool = schoolService.getById(schooldId);
+                schoolService.save(school);
+            } else {
 
-            //     if (oldSchool != null) {
-            //         oldSchool.setId(schooldId);
-            //         oldSchool.setName(schoolName.replace("\"", ""));
-            //         oldSchool.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
-            //         oldSchool.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
-            //         schoolService.save(oldSchool);
-            //     }
+                if (oldSchool != null) {
+                    oldSchool.setId(schooldId);
+                    oldSchool.setName(schoolName.replace("\"", ""));
+                    oldSchool.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
+                    oldSchool.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
+                    schoolService.save(oldSchool);
+                }
 
-            // }
-
-            System.out.println("School has child ? => " + schoolHasChild + " | SchoolName => " + schoolName + " | Location => "+ schoolCoordinatesJsonNodes.get(0));
+            }
 
         }
         System.err.println("DATAS INSERTION DONE");
