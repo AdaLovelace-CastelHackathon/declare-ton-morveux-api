@@ -20,7 +20,7 @@ public class SchoolService {
     }
 
     public School getById(Long id) throws DatabaseException {
-        return this.schoolRepository.findById(id).get();
+        return this.schoolRepository.getOne(id);
     }
 
     public School save(School school) throws DatabaseException {
