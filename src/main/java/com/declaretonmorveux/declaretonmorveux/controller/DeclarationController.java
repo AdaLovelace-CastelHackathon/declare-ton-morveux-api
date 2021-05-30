@@ -1,8 +1,5 @@
 package com.declaretonmorveux.declaretonmorveux.controller;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.declaretonmorveux.declaretonmorveux.service.DeclarationService;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,6 +13,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import com.declaretonmorveux.declaretonmorveux.validator.UsernameConstraint;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,16 +27,15 @@ public class Parent implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @UsernameConstraint
     @NotEmpty(message = "Username cannot be empty")
     private String username;
 
     @NotEmpty(message = "Password cannot be empty")
     private String password;
 
-    @Transient
-    private String confirmPassword;
-
     @Email(message = "The email is not valid")
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
 
     @Column(name = "is_account_non_expired")
@@ -60,7 +61,6 @@ public class Parent implements UserDetails {
     public Parent(
             String username,
             String password,
-            String confirmPassword,
             String email,
             boolean accountNonExpired,
             boolean accountNonLocked,
@@ -71,7 +71,6 @@ public class Parent implements UserDetails {
 
         this.username = username;
         this.password = password;
-        this.confirmPassword = confirmPassword;
         this.email = email;
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
@@ -152,14 +151,6 @@ public class Parent implements UserDetails {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getEmail() {
