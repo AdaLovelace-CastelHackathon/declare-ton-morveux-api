@@ -1,6 +1,7 @@
 package com.declaretonmorveux.declaretonmorveux.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.declaretonmorveux.declaretonmorveux.exception.DatabaseException;
 import com.declaretonmorveux.declaretonmorveux.model.School;
@@ -20,7 +21,13 @@ public class SchoolService {
     }
 
     public School getById(Long id) throws DatabaseException {
-        return this.schoolRepository.getOne(id);
+        Optional<School> school = this.schoolRepository.findById(id);
+
+        if(school.isPresent()){
+            return school.get();
+        } 
+
+        return null;
     }
 
     public School save(School school) throws DatabaseException {

@@ -12,7 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DatasRunner implements CommandLineRunner{
+public class DatasRunner implements CommandLineRunner {
 
     @Autowired
     SchoolClient schoolClient;
@@ -30,14 +30,14 @@ public class DatasRunner implements CommandLineRunner{
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(datas).get("features");
 
-        for(int i = 0; i < jsonNode.size(); i++){
+        for (int i = 0; i < jsonNode.size(); i++) {
             long schooldId = i + 1;
-            School oldSchool = schoolService.getById(schooldId);
             boolean schoolHasChild = (childService.getBySchoolId(schooldId).size() > 0);
             String schoolName = jsonNode.get(i).get("properties").get("libel").toString();
             JsonNode schoolCoordinatesJsonNodes = jsonNode.get(i).get("geometry").get("coordinates");
 
-            if(!schoolHasChild && !schoolName.isEmpty()){
+            if (!schoolHasChild && !schoolName.isEmpty()) {
+
                 schoolService.deleteById(schooldId);
 
                 School school = new School();
@@ -48,17 +48,20 @@ public class DatasRunner implements CommandLineRunner{
 
                 schoolService.save(school);
             } else {
-                oldSchool.setId(schooldId);
-                oldSchool.setName(schoolName.replace("\"", ""));
-                oldSchool.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
-                oldSchool.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
+                School oldSchool = schoolService.getById(schooldId);
 
-                schoolService.save(oldSchool);
+                if (oldSchool != null) {
+                    oldSchool.setId(schooldId);
+                    oldSchool.setName(schoolName.replace("\"", ""));
+                    oldSchool.setLatitude(schoolCoordinatesJsonNodes.get(0).toString());
+                    oldSchool.setLongitude(schoolCoordinatesJsonNodes.get(1).toString());
+                    schoolService.save(oldSchool);
+                }
+
             }
 
-            
         }
         System.err.println("DATAS INSERTION DONE");
     }
-    
+
 }
