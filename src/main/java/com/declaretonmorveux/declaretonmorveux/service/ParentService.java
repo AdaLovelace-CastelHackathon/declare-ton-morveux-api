@@ -1,10 +1,12 @@
 package com.declaretonmorveux.declaretonmorveux.service;
 
+import com.declaretonmorveux.declaretonmorveux.dto.ParentDto;
 import com.declaretonmorveux.declaretonmorveux.model.Parent;
 import com.declaretonmorveux.declaretonmorveux.repository.ParentRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,12 +35,6 @@ public class ParentService implements UserDetailsService {
 
     public boolean addNewUser(Parent user) {
 
-        boolean usernameAlreadyExist = countUserByUsername(user.getUsername()) > 0;
-
-        if (usernameAlreadyExist) {
-            return false;
-        }
-
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setEnabled(true);
@@ -51,6 +47,15 @@ public class ParentService implements UserDetailsService {
             System.out.println("ERROR WHILE SAVING THE USER");
             return false;
         }
+    }
+
+    public ParentDto getParent(Authentication authentication){
+        ModelMapper mapper = new ModelMapper();
+
+        Parent parent = (Parent)authentication.getPrincipal();
+        ParentDto parentDto = mapper.map(parent, ParentDto.class);
+
+        return parentDto;
     }
 
     public boolean emailAlreadyExist(String email) {

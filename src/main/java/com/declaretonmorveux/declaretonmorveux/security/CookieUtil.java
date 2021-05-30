@@ -1,12 +1,7 @@
 package com.declaretonmorveux.declaretonmorveux.security;
 
-import static com.declaretonmorveux.declaretonmorveux.security.jwt.JwtTokenUtil.JWT_TOKEN_VALIDITY;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;

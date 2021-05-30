@@ -1,8 +1,6 @@
 package com.declaretonmorveux.declaretonmorveux.service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.declaretonmorveux.declaretonmorveux.model.Declaration;
 import com.declaretonmorveux.declaretonmorveux.repository.DeclarationRepository;

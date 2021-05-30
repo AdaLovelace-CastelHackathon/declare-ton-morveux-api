@@ -1,7 +1,6 @@
 package com.declaretonmorveux.declaretonmorveux.task;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import com.declaretonmorveux.declaretonmorveux.model.Child;
@@ -17,7 +16,7 @@ public class ChildTask {
     @Autowired
     private ChildRepository childRepository;
 
-    @Scheduled(cron = "@midnight")
+    @Scheduled(fixedDelay = 600000)
     public void update() {
         List<Child> childs = childRepository.getAllByIsSick(true);
 
